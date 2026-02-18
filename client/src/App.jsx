@@ -21,7 +21,6 @@ import { AnimatePresence } from 'framer-motion';
 function Home() {
   return (
     <>
-      <HeroScene />
       <Hero />
       <About />
       <Stats />
@@ -40,6 +39,7 @@ function App() {
   return (
     <Router>
       <div className="app-container">
+        <HeroScene />
         <Navbar />
         <main>
           <Routes>

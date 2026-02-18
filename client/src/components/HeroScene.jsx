@@ -63,7 +63,7 @@ function StarField() {
 
 const HeroScene = () => {
     return (
-        <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100vh', zIndex: -1, background: '#000' }}>
+        <div style={{ position: 'fixed', top: 0, left: 0, width: '100%', height: '100vh', zIndex: -1, background: '#000' }}>
             <Canvas camera={{ position: [0, 0, 4] }}>
                 <fog attach="fog" args={['#000000', 5, 15]} />
                 <ambientLight intensity={1} />
