@@ -1,8 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import '../styles/Contact.scss';
 import { FaPaperPlane, FaPhone, FaEnvelope, FaMapMarkerAlt, FaTwitter, FaInstagram, FaLinkedin } from 'react-icons/fa';
+import emailjs from '@emailjs/browser';
 
 const Contact = () => {
+    const form = useRef();
+    const [loading, setLoading] = useState(false);
     const [formData, setFormData] = useState({
         firstName: '',
         lastName: '',
@@ -20,9 +23,30 @@ const Contact = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        console.log('Form Submitted:', formData);
-        alert('Message sent! (Simulated)');
-        // Add EmailJS or backend logic here
+        setLoading(true);
+
+        emailjs.sendForm(
+            import.meta.env.VITE_EMAILJS_SERVICE_ID,
+            import.meta.env.VITE_EMAILJS_TEMPLATE_ID,
+            form.current,
+            import.meta.env.VITE_EMAILJS_PUBLIC_KEY
+        )
+            .then((result) => {
+                console.log(result.text);
+                alert('Message sent successfully!');
+                setFormData({
+                    firstName: '',
+                    lastName: '',
+                    email: '',
+                    phone: '',
+                    message: ''
+                });
+                setLoading(false);
+            }, (error) => {
+                console.log(error.text);
+                alert('Failed to send message. Please try again.');
+                setLoading(false);
+            });
     };
 
     return (
@@ -62,7 +86,7 @@ const Contact = () => {
 
                     {/* Right Panel: Form */}
                     <div className="contact-form-panel">
-                        <form onSubmit={handleSubmit}>
+                        <form ref={form} onSubmit={handleSubmit}>
                             <div className="form-grid">
                                 <div className="form-group">
                                     <label>First Name</label>
@@ -118,7 +142,9 @@ const Contact = () => {
                                 ></textarea>
                             </div>
 
-                            <button type="submit" className="submit-btn" style={{ float: "right" }}>Send Message</button>
+                            <button type="submit" className="submit-btn" style={{ float: "right" }} disabled={loading}>
+                                {loading ? 'Sending...' : 'Send Message'}
+                            </button>
                         </form>
                     </div>
                 </div>

@@ -22,10 +22,12 @@ const Navbar = () => {
     }, [scrolled]);
 
     return (
-        <nav className={`navbar ${scrolled ? 'scrolled' : ''}`}>
+        <nav className={`navbar ${scrolled ? 'scrolled glass' : ''}`}>
             <div className="logo">
-                <FaShieldAlt style={{ color: '#ea2027', fontSize: '2rem' }} />
-                <span style={{ fontFamily: '"Orbitron", sans-serif', textTransform: 'uppercase', letterSpacing: '2px' }}>Cyber Shield</span>
+                <FaShieldAlt style={{ color: 'var(--theme-red)', fontSize: '2rem' }} />
+                <span style={{ fontFamily: '"Orbitron", sans-serif', textTransform: 'uppercase', letterSpacing: '2px', textShadow: '0 0 10px var(--theme-red)' }}>
+                    Cyber <span style={{ color: 'var(--highlight-blue)' }}>Shield</span>
+                </span>
             </div>
             <div className="nav-links">
                 <Link to="/">Home</Link>

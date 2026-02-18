@@ -4,24 +4,39 @@
     --theme-orange: #f79f1f;
     /* Accent Orange */
     --theme-dark: #1e272e;
-    /* Dark Blue-Grey Background */
-    --theme-black: #000000;
-    /* Pure Black */
+    --theme-red: #b000c3;
+    /* Neon Purple */
+    --highlight-blue: #00d2ff;
+    --theme-dark: #0f0c29;
+    /* Dark Blue */
+    --theme-darker: #050314;
     --text-main: #ffffff;
-    --text-muted: #b2bec3;
-    --card-bg: #121212;
-    --gradient-red: linear-gradient(135deg, #ea2027 0%, #ff4757 100%);
+    --text-secondary: #d1d5db;
+    --glass-bg: rgba(255, 255, 255, 0.05);
+    --glass-border: rgba(255, 255, 255, 0.1);
+    --neon-glow: 0 0 10px #b000c3, 0 0 20px #b000c3;
 }
 
 body {
     margin: 0;
     padding: 0;
-    background-color: var(--theme-black);
+    background-color: var(--theme-dark);
     color: var(--text-main);
     font-family: 'Inter', sans-serif;
     /* Ensure you have this font or a similar one */
     overflow-x: hidden;
     line-height: 1.6;
+}
+
+.glass {
+    background: var(--glass-bg);
+    backdrop-filter: blur(10px);
+    border: 1px solid var(--glass-border);
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+}
+
+.neon-text {
+    text-shadow: var(--neon-glow);
 }
 
 canvas {
