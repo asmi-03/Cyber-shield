@@ -52,7 +52,6 @@ const Navbar = () => {
                 <HashLink smooth to="/#services">Services</HashLink>
                 <Link to="/contact">Contact</Link>
 
-                <Link to="/dashboard">Pages</Link>
             </div>
 
         </nav>
