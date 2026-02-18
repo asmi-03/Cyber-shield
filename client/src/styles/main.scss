@@ -805,12 +805,17 @@ section {
 
 /* Footer Section */
 /* Footer Section */
+/* Footer Section */
 .site-footer {
-    background: #050505;
+    background: transparent;
+    /* Changed from #050505 */
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
 
     .footer-main {
         padding: 100px 0 50px 0;
-        background: #0a0a0a;
+        background: rgba(10, 10, 10, 0.5);
+        /* Semi-transparent */
+        backdrop-filter: blur(10px);
 
         .footer-grid {
             display: grid;
@@ -903,7 +908,7 @@ section {
     .footer-bottom {
         padding: 20px 0;
         text-align: center;
-        background: #050505;
+        background: rgba(5, 5, 5, 0.8);
         border-top: 1px solid rgba(255, 255, 255, 0.05);
         color: var(--text-muted);
         font-size: 0.9rem;
