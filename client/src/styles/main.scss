@@ -326,7 +326,8 @@ section {
 
 /* Stats Section */
 .stats-section {
-    background: #111;
+    background: transparent;
+    /* Changed from #111 */
     padding: 4rem 0;
 
     .stats-grid {
@@ -510,7 +511,8 @@ section {
 /* Trusted Companies Section */
 .trusted-section {
     padding: 60px 0;
-    background: #0a0a0a;
+    background: transparent;
+    /* Changed from #0a0a0a */
     border-top: 1px solid rgba(255, 255, 255, 0.05);
     border-bottom: 1px solid rgba(255, 255, 255, 0.05);
 
@@ -541,7 +543,8 @@ section {
 /* Feature Section */
 .feature-section {
     padding: 100px 0;
-    background: #0e0e0e;
+    background: transparent;
+    /* Changed from #0e0e0e */
     /* Slightly lighter than pure black */
 
     .feature-grid {
@@ -747,7 +750,8 @@ section {
 /* Blog Section */
 .blog-section {
     padding: 100px 0;
-    background: #0e0e0e;
+    background: transparent;
+    /* Changed from #0e0e0e */
 
     .blog-grid {
         display: grid;
