@@ -23,7 +23,7 @@ const Services = () => {
             title: 'Industry Certified',
             desc: 'Our security practices follow industry standards and compliance frameworks, ensuring reliable, trusted, and certified protection for businesses of all sizes across multiple sectors.',
             buttonText: 'View Certifications >',
-            highlight: true // This one will have the red gradient background
+            highlight: false // This one will have the red gradient background
         }
     ];
 
