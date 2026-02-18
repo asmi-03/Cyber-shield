@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { HashLink } from 'react-router-hash-link';
 import { FaShieldAlt } from 'react-icons/fa';
 import { motion } from 'framer-motion';
 
@@ -31,7 +32,7 @@ const Navbar = () => {
             </div>
             <div className="nav-links">
                 <Link to="/">Home</Link>
-                <a href="#about">About</a>
+                <HashLink smooth to="/#about">About</HashLink>
                 <Link to="/check-website"
                     className="nav-special-btn"
                     style={{
@@ -48,7 +49,7 @@ const Navbar = () => {
                 >
                     Check My Website
                 </Link>
-                <a href="#services">Services</a>
+                <HashLink smooth to="/#services">Services</HashLink>
                 <Link to="/contact">Contact</Link>
 
                 <Link to="/dashboard">Pages</Link>
