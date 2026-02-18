@@ -1,0 +1,20 @@
+{
+  "name": "cyber-website",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "client": "npm run dev --prefix client",
+    "server": "node server/index.js",
+    "ml": "cd ml-service && python app.py",
+    "dev": "concurrently \"npm run client\" \"npm run server\" \"npm run ml\""
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "devDependencies": {
+    "concurrently": "^9.2.1"
+  }
+}
