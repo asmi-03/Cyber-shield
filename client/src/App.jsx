@@ -15,6 +15,7 @@ import FAQ from './components/FAQ';
 import Blog from './components/Blog';
 import Footer from './components/Footer';
 import Contact from './components/Contact';
+import ChatBot from './components/ChatBot';
 import Dashboard from './pages/Dashboard';
 import { AnimatePresence } from 'framer-motion';
 
@@ -50,6 +51,7 @@ function App() {
           </Routes>
         </main>
         <Footer />
+        <ChatBot />
       </div>
     </Router>
   );
