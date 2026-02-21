@@ -1,11 +1,20 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { HashLink } from 'react-router-hash-link';
-import { FaShieldAlt } from 'react-icons/fa';
+import { FaShieldAlt, FaBars, FaTimes } from 'react-icons/fa';
 import { motion } from 'framer-motion';
 
 const Navbar = () => {
     const [scrolled, setScrolled] = useState(false);
+    const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+    const toggleMenu = () => {
+        setIsMobileMenuOpen(!isMobileMenuOpen);
+    };
+
+    const closeMenu = () => {
+        setIsMobileMenuOpen(false);
+    };
 
     useEffect(() => {
         const handleScroll = () => {
@@ -30,9 +39,12 @@ const Navbar = () => {
                     Cyber <span style={{ color: 'var(--highlight-blue)' }}>Shield</span>
                 </span>
             </div>
-            <div className="nav-links">
-                <Link to="/">Home</Link>
-                <HashLink smooth to="/#about">About</HashLink>
+            <div className="mobile-menu-icon" onClick={toggleMenu}>
+                {isMobileMenuOpen ? <FaTimes /> : <FaBars />}
+            </div>
+            <div className={`nav-links ${isMobileMenuOpen ? 'active' : ''}`}>
+                <Link to="/" onClick={closeMenu}>Home</Link>
+                <HashLink smooth to="/#about" onClick={closeMenu}>About</HashLink>
                 <Link to="/check-website"
                     className="nav-special-btn"
                     style={{
@@ -46,11 +58,12 @@ const Navbar = () => {
                         display: 'inline-block',
                         boxShadow: '0 0 10px rgba(234, 32, 39, 0.4)'
                     }}
+                    onClick={closeMenu}
                 >
                     Check My Website
                 </Link>
-                <HashLink smooth to="/#services">Services</HashLink>
-                <Link to="/contact">Contact</Link>
+                <HashLink smooth to="/#services" onClick={closeMenu}>Services</HashLink>
+                <Link to="/contact" onClick={closeMenu}>Contact</Link>
 
             </div>
 
