@@ -30,21 +30,13 @@ const Hero = () => {
                     }}
                 >
                     <motion.h1
+                        className="hero-title"
                         variants={{
                             hidden: { opacity: 0, y: 20 },
                             visible: { opacity: 1, y: 0, transition: { type: "spring", stiffness: 100 } }
                         }}
-                        style={{
-                            fontSize: '6rem',
-                            fontWeight: 'bold',
-                            lineHeight: '1.1',
-                            marginBottom: '1.5rem',
-                            textShadow: '0 0 20px rgba(234, 32, 39, 0.5)',
-                            fontFamily: '"Orbitron", sans-serif',
-                            textTransform: 'uppercase'
-                        }}
                     >
-                        Cyber <span style={{ color: '#ea2027', display: 'inline-block' }}>Shield</span>
+                        Cyber <span className="highlight">Shield</span>
                     </motion.h1>
 
                     <motion.div
@@ -56,18 +48,10 @@ const Hero = () => {
                     />
 
                     <motion.p
+                        className="hero-subtitle"
                         variants={{
                             hidden: { opacity: 0, x: -20 },
                             visible: { opacity: 1, x: 0 }
-                        }}
-                        style={{
-                            fontSize: '1.5rem',
-                            maxWidth: '750px',
-                            marginBottom: '3rem',
-                            lineHeight: '1.6',
-                            borderLeft: '5px solid #ea2027',
-                            paddingLeft: '30px',
-                            background: 'linear-gradient(90deg, rgba(234,32,39,0.1) 0%, rgba(0,0,0,0) 100%)'
                         }}
                     >
                         Cyber Shield is an advanced AI-powered cybersecurity platform designed to detect, analyze, and prevent phishing attacks in real time. It combines modern web technologies with intelligent automation to create a fully secure digital environment for users and organizations.

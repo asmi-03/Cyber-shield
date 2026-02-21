@@ -210,24 +210,84 @@ section {
         max-width: 600px;
         z-index: 2;
 
-        h1 {
-            font-size: 4rem;
-            margin-bottom: 20px;
+        .hero-title {
+            font-size: 6rem;
+            font-weight: bold;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            text-shadow: 0 0 20px rgba(234, 32, 39, 0.5);
+            font-family: 'Orbitron', sans-serif;
+            text-transform: uppercase;
 
-            span {
-                color: var(--theme-red);
+            .highlight {
+                color: #ea2027;
+                display: inline-block;
             }
         }
 
-        p {
-            font-size: 1.1rem;
-            margin-bottom: 2rem;
-            max-width: 500px;
+        .hero-subtitle {
+            font-size: 1.5rem;
+            max-width: 750px;
+            margin-bottom: 3rem;
+            line-height: 1.6;
+            border-left: 5px solid #ea2027;
+            padding-left: 30px;
+            background: linear-gradient(90deg, rgba(234, 32, 39, 0.1) 0%, rgba(0, 0, 0, 0) 100%);
         }
 
         .hero-buttons {
             display: flex;
             gap: 1rem;
+        }
+    }
+}
+
+@media (max-width: 1024px) {
+    .hero-section .hero-content {
+        .hero-title {
+            font-size: 4.5rem;
+        }
+
+        .hero-subtitle {
+            font-size: 1.3rem;
+            max-width: 600px;
+        }
+    }
+}
+
+@media (max-width: 768px) {
+    .hero-section .hero-content {
+        .hero-title {
+            font-size: 3rem;
+        }
+
+        .hero-subtitle {
+            font-size: 1.1rem;
+            padding-left: 15px;
+            border-left-width: 3px;
+        }
+    }
+}
+
+@media (max-width: 480px) {
+    .hero-section .hero-content {
+        .hero-title {
+            font-size: 2.2rem;
+            text-shadow: 0 0 10px rgba(234, 32, 39, 0.5);
+        }
+
+        .hero-subtitle {
+            font-size: 1rem;
+        }
+
+        .hero-buttons {
+            flex-direction: column;
+            width: 100%;
+
+            .btn {
+                width: 100%;
+                text-align: center;
+            }
         }
     }
 }
