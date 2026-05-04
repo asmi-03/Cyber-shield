@@ -1,7 +1,6 @@
 import React from 'react';
-import { FaUserShield, FaLock, FaFileContract } from 'react-icons/fa';
 import { motion } from 'framer-motion';
-
+import { FaUserShield, FaLock, FaFileContract } from 'react-icons/fa';
 const Services = () => {
     const services = [
         {

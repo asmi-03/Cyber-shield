@@ -2,6 +2,8 @@ import React, { useState, useRef } from 'react';
 import '../styles/Contact.scss';
 import { FaPaperPlane, FaPhone, FaEnvelope, FaMapMarkerAlt, FaTwitter, FaInstagram, FaLinkedin } from 'react-icons/fa';
 import emailjs from '@emailjs/browser';
+import { sendDataToAI } from '../services/n8nService';
+
 
 const Contact = () => {
     const form = useRef();
@@ -25,6 +27,13 @@ const Contact = () => {
         e.preventDefault();
         setLoading(true);
 
+        // Also send to n8n for webhook processing
+        sendDataToAI({
+            type: 'contact_form',
+            ...formData
+        }).catch(err => console.error("n8n Contact Error:", err));
+
+        // Send main email via EmailJS
         emailjs.sendForm(
             import.meta.env.VITE_EMAILJS_SERVICE_ID,
             import.meta.env.VITE_EMAILJS_TEMPLATE_ID,
@@ -134,7 +143,7 @@ const Contact = () => {
                                 <label>Message</label>
                                 <textarea
                                     name="message"
-                                    rows="1"
+                                    rows="4"
                                     placeholder="Write your message.."
                                     value={formData.message}
                                     onChange={handleChange}
@@ -142,7 +151,7 @@ const Contact = () => {
                                 ></textarea>
                             </div>
 
-                            <button type="submit" className="submit-btn" style={{ float: "right" }} disabled={loading}>
+                            <button type="submit" className="submit-btn" disabled={loading}>
                                 {loading ? 'Sending...' : 'Send Message'}
                             </button>
                         </form>

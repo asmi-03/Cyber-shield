@@ -1,3 +1,4 @@
+
 :root {
     --theme-red: #ea2027;
     /* Redlight Red */
@@ -26,7 +27,7 @@
 body {
     margin: 0;
     padding: 0;
-    width: 100vw;
+    width: 100%;
     background-color: var(--theme-dark);
     color: var(--text-main);
     font-family: 'Inter', sans-serif;

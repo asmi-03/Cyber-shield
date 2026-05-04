@@ -1,5 +1,5 @@
 import React from 'react';
-import { HashRouter as Router, Routes, Route } from 'react-router-dom';
+import { HashRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import HeroScene from './components/HeroScene';
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
@@ -17,7 +17,6 @@ import Footer from './components/Footer';
 import Contact from './components/Contact';
 import ChatBot from './components/ChatBot';
 import Dashboard from './pages/Dashboard';
-import { AnimatePresence } from 'framer-motion';
 
 function Home() {
   return (
@@ -25,7 +24,6 @@ function Home() {
       <Hero />
       <About />
       <Stats />
-
       <WhyChooseUs />
       <Services />
       <FeatureSection />
@@ -36,23 +34,38 @@ function Home() {
   );
 }
 
+function AppLayout({ children }) {
+  const location = useLocation();
+  const isDashboard = location.pathname === '/dashboard';
+
+  if (isDashboard) {
+    return <main className="dashboard-layout">{children}</main>;
+  }
+
+  return (
+    <div className="app-container">
+      <HeroScene />
+      <Navbar />
+      <main>
+        {children}
+      </main>
+      <Footer />
+      <ChatBot />
+    </div>
+  );
+}
+
 function App() {
   return (
     <Router>
-      <div className="app-container">
-        <HeroScene />
-        <Navbar />
-        <main>
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/check-website" element={<WebsiteChecker />} />
-            <Route path="/contact" element={<Contact />} />
-            <Route path="/dashboard" element={<Dashboard />} />
-          </Routes>
-        </main>
-        <Footer />
-        <ChatBot />
-      </div>
+      <AppLayout>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/check-website" element={<WebsiteChecker />} />
+          <Route path="/contact" element={<Contact />} />
+          <Route path="/dashboard" element={<Dashboard />} />
+        </Routes>
+      </AppLayout>
     </Router>
   );
 }

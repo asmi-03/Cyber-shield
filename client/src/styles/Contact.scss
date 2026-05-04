@@ -1,12 +1,12 @@
 /* Contact Section Styles */
 .contact-section {
     padding: 100px 0;
-    background: transparent;
-    /* Changed from #000 */
+    background: rgba(5, 3, 20, 0.9); /* Dark background with opacity to improve readability over HeroScene */
     position: relative;
-    overflow: hidden;
+    overflow-x: hidden;
     display: flex;
-    justify-content: center;
+    flex-direction: column;
+    justify-content: flex-start;
     align-items: center;
     min-height: 100vh;
 
@@ -46,10 +46,9 @@
         z-index: 2;
         width: 100%;
         max-width: 1400px;
-        /* Increased width */
-        padding: 0 40px;
-        height: 85vh;
-        /* Occupy vertical space */
+        padding: 60px 40px;
+        min-height: 85vh;
+        height: auto;
         display: flex;
         align-items: center;
         justify-content: center;
@@ -66,9 +65,8 @@
         grid-template-columns: 1fr 1.5fr;
         box-shadow: 0 50px 100px -20px rgba(0, 0, 0, 0.7);
         width: 100%;
-        height: 100%;
-        /* Fill container */
-        min-height: 700px;
+        height: auto;
+        min-height: 600px;
         /* Ensure good height on taller screens */
 
         @media (max-width: 968px) {
@@ -144,6 +142,7 @@
                 }
 
                 span {
+                    padding-left: 10px; // Prevent text clipping
                     font-size: 0.95rem;
                     line-height: 1.5;
                 }
@@ -302,6 +301,87 @@
                 background: #ff3f34;
                 transform: translateY(-2px);
                 box-shadow: 0 15px 25px rgba(234, 32, 39, 0.4);
+            }
+        }
+    }
+
+    /* Newsletter Section Styles */
+    .newsletter-section {
+        width: 100%;
+        margin-top: 50px; // Reduced from 100px
+        padding: 0 40px;
+        position: relative;
+        z-index: 2;
+        display: flex;
+        justify-content: center;
+
+        .newsletter-box {
+            width: 100%;
+            max-width: 1320px; // Match max-width of glass-card
+            background: rgba(20, 20, 20, 0.8);
+            backdrop-filter: blur(25px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            padding: 60px 40px;
+            border-radius: 20px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+            box-shadow: 0 50px 100px -20px rgba(0, 0, 0, 0.7);
+
+            h2 {
+                font-size: clamp(1.8rem, 5vw, 2.5rem); // Responsive font size
+                margin-bottom: 0;
+                color: white;
+            }
+
+            p {
+                max-width: 600px;
+                color: var(--text-muted);
+            }
+
+            .subscribe-form {
+                display: flex;
+                width: 100%;
+                max-width: 600px;
+                gap: 15px;
+                margin-top: 20px;
+
+                @media (max-width: 576px) {
+                    flex-direction: column;
+                }
+
+                input {
+                    flex: 1;
+                    background: rgba(255, 255, 255, 0.05);
+                    border: 1px solid rgba(255, 255, 255, 0.1);
+                    padding: 15px 25px;
+                    border-radius: 10px;
+                    color: white;
+                    font-size: 1rem;
+
+                    &:focus {
+                        outline: none;
+                        border-color: var(--theme-red);
+                    }
+                }
+
+                button {
+                    background: var(--theme-red);
+                    color: white;
+                    border: none;
+                    padding: 15px 35px;
+                    border-radius: 10px;
+                    font-weight: 600;
+                    cursor: pointer;
+                    transition: all 0.3s ease;
+
+                    &:hover {
+                        background: #ff3f34;
+                        transform: translateY(-2px);
+                    }
+                }
             }
         }
     }

@@ -1,6 +1,5 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-
 const WhyChooseUs = () => {
     return (
         <section className="why-choose-us-section" style={{ textAlign: 'center' }}>

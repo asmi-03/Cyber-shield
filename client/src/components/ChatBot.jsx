@@ -1,8 +1,8 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { FaRobot, FaTimes, FaPaperPlane, FaUser, FaSync } from 'react-icons/fa';
 import '../styles/ChatBot.scss';
-import axios from 'axios';
-import { motion, AnimatePresence } from 'framer-motion';
+
+import { motion, AnimatePresence } from "framer-motion";
 
 const ChatBot = () => {
     const [isOpen, setIsOpen] = useState(false);
@@ -33,15 +33,21 @@ const ChatBot = () => {
         setIsLoading(true);
 
         try {
-            // Call our backend API which forwards to n8n
-            const response = await axios.post('http://localhost:5000/api/chat', {
-                message: userMessage.text
+            const response = await fetch("http://localhost:5678/webhook-test/ai-chat", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    message: userMessage.text
+                })
             });
 
-            // Expecting response.data.reply from backend
+            const data = await response.text(); // ✅ IMPORTANT
+
             const botMessage = {
                 id: Date.now() + 1,
-                text: response.data.reply || "I received your message but got an empty response.",
+                text: data,
                 sender: "bot"
             };
             setMessages(prev => [...prev, botMessage]);

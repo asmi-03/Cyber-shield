@@ -1,7 +1,7 @@
 import React from 'react';
 import { FaGlobe, FaShieldAlt, FaDollarSign, FaUserSecret } from 'react-icons/fa';
 import CountUp from 'react-countup';
-import { motion, useAnimation } from 'framer-motion';
+import { motion, useAnimation } from "framer-motion";
 
 const StatItem = ({ icon, number, label, suffix }) => {
     const controls = useAnimation();

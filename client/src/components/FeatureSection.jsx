@@ -1,6 +1,5 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-
 const FeatureSection = () => {
     return (
         <section className="feature-section">

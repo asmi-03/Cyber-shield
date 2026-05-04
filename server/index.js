@@ -2,7 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const dotenv = require('dotenv');
-const axios = require('axios'); // For calling ML service
+const axios = require('axios'); 
 
 dotenv.config();
 
@@ -13,114 +13,144 @@ const PORT = process.env.PORT || 5000;
 app.use(cors());
 app.use(express.json());
 
+// MongoDB connection
+mongoose.connect(process.env.MONGO_URI || 'mongodb://127.0.0.1:27017/cybershield')
+    .then(() => console.log('MongoDB Connected for Logging'))
+    .catch(err => console.log('MongoDB Connection Error:', err));
+
+// Threat Log Schema
+const ThreatLogSchema = new mongoose.Schema({
+    id: String,
+    type: String,
+    target: String,
+    status: String,
+    time: String,
+    severity: String,
+});
+const ThreatLog = mongoose.model('ThreatLog', ThreatLogSchema);
+
+// In-memory threat level score
+let currentThreatLevel = 'Low';
+
+// Helper to evaluate threat level based on past 5 logs
+const calculateThreatLevel = async () => {
+    const logs = await ThreatLog.find().sort({_id: -1}).limit(5);
+    const criticals = logs.filter(l => l.severity === 'Critical').length;
+    const highs = logs.filter(l => l.severity === 'High').length;
+    if (criticals > 0) return 'High';
+    if (highs > 1) return 'High';
+    if (highs === 1 || logs.some(l => l.severity === 'Medium')) return 'Medium';
+    return 'Low';
+}
+
 // Routes
 app.get('/', (req, res) => {
-    res.send('Cyber Shield 3D API is running');
+    res.send('Cyber Shield API is running');
 });
 
-// Scan URL Endpoint
+// Original Scan URL Endpoint
 app.post('/api/scan', async (req, res) => {
     const { url } = req.body;
-
-    if (!url) {
-        return res.status(400).json({ error: 'URL is required' });
-    }
-
+    if (!url) return res.status(400).json({ error: 'URL is required' });
     try {
-        // 1. Call ML Service (Python)
-        // Note: Ensure the python service is running on port 5000 (wait, default flask/uvicorn might conflict, let's check ports)
-        // I will assume Python runs on 5001 for now to avoid conflict with Express on 5000
         const mlResponse = await axios.post('http://localhost:5001/predict', { url });
-
-        const result = {
-            url,
-            ...mlResponse.data,
-            timestamp: new Date()
-        };
-
-        // 2. Save to MongoDB (TODO: Create Schema later, just logging for now)
+        const result = { url, ...mlResponse.data, timestamp: new Date() };
         console.log('Scan Result:', result);
-
-
-        // 3. Send Webhook (Fire and Forget)
         if (process.env.WEBHOOK_URL) {
-            axios.post(process.env.WEBHOOK_URL, result)
-                .then(() => console.log('Webhook sent successfully'))
-                .catch(err => console.error('Webhook failed:', err.message));
+            axios.post(process.env.WEBHOOK_URL, result).catch(e => {});
         }
-
         return res.json(result);
-
     } catch (error) {
-        console.error('Scan Error:', error.message);
-        // Fallback mock response if ML service is down
-        return res.json({
-            url,
-            prediction: 'unknown',
-            confidence: 0,
-            error: 'ML Service unavailable'
+        return res.json({ url, prediction: 'unknown', confidence: 0, error: 'ML Service unavailable' });
+    }
+});
+
+// Original Chat Endpoint
+app.post('/api/chat', async (req, res) => {
+    const { message } = req.body;
+    if (!message) return res.status(400).json({ error: 'Message is required' });
+    try {
+        if (!process.env.AI_AGENT_WEBHOOK) return res.json({ reply: "AI Agent not configured." });
+        const response = await axios.post(process.env.AI_AGENT_WEBHOOK, { message });
+        const reply = response.data.reply || response.data.output || response.data.text || null;
+        res.json({ reply: reply || "I received an empty response." });
+    } catch (error) {
+        res.status(500).json({ reply: "Internal Server Error during AI request." });
+    }
+});
+
+// Robust n8n Proxy Endpoint
+app.post('/api/n8n', async (req, res) => {
+    try {
+        const webhookUrl = process.env.AI_AGENT_WEBHOOK || 'http://localhost:5678/webhook/xyz123';
+        const response = await axios.post(webhookUrl, req.body);
+        res.json(response.data);
+    } catch (error) {
+        console.error("n8n Proxy Error:", error.message);
+        res.status(500).json({ 
+            error: "Failed to connect to n8n", 
+            details: error.message,
+            hint: "Make sure n8n is running and the webhook URL is correct."
         });
     }
 });
-
-// AI Chat Endpoint
-app.post('/api/chat', async (req, res) => {
-    const { message } = req.body;
-
-    if (!message) {
-        return res.status(400).json({ error: 'Message is required' });
+app.get('/api/dashboard', async (req, res) => {
+    try {
+        const logs = await ThreatLog.find().sort({_id: -1}).limit(20);
+        currentThreatLevel = await calculateThreatLevel();
+        res.json({ threatLevel: currentThreatLevel, logs });
+    } catch (err) {
+        res.status(500).json({ error: 'Failed to fetch dashboard data' });
     }
+});
+
+// SIMULATION API
+app.post('/api/simulate', async (req, res) => {
+    const attacks = [
+        { type: 'Phishing Email', target: 'Employee Inbox', severity: 'High' },
+        { type: 'Malware Download', target: 'User Browser', severity: 'Critical' },
+        { type: 'SQL Injection', target: 'Database', severity: 'Medium' },
+        { type: 'Brute Force SSH', target: 'Server', severity: 'High' },
+        { type: 'Anomalous Login', target: 'VPN', severity: 'Medium' },
+    ];
+    
+    const attack = attacks[Math.floor(Math.random() * attacks.length)];
+    const log = new ThreatLog({
+        id: Date.now().toString(),
+        type: attack.type,
+        target: attack.target,
+        status: 'Blocked',
+        time: new Date().toLocaleTimeString(),
+        severity: attack.severity
+    });
 
     try {
-        console.log('Sending message to AI Agent at:', process.env.AI_AGENT_WEBHOOK);
-        if (!process.env.AI_AGENT_WEBHOOK) {
-            console.error('AI_AGENT_WEBHOOK is not defined in .env');
-            return res.json({ reply: "AI Agent is not configured. Please contact support." });
-        }
-
-        const response = await axios.post(process.env.AI_AGENT_WEBHOOK, { message });
-
-        // Log the full response from n8n for debugging
-        console.log('n8n Full Response:', JSON.stringify(response.data, null, 2));
-
-        // Check for specific error fields cleanly
-        if (response.data.error) {
-            console.error('n8n returned an error:', response.data.error);
-            return res.json({ reply: `Error from AI Agent: ${response.data.error.message || response.data.error}` });
-        }
-
-        // Assume n8n returns { reply: "..." } or { output: "..." } or { text: "..." }
-        // If n8n returns a JSON object with the answer in a property
-        const reply = response.data.reply || response.data.output || response.data.text || (typeof response.data === 'string' ? response.data : null);
-
-        if (!reply) {
-            console.warn('n8n returned no recognizable reply field. Raw data:', response.data);
-            // Verify if your n8n Respond to Webhook node is set to "JSON" and has a "reply" field
-            return res.json({ reply: "I received an empty response from the AI agent. Please check the n8n workflow 'Respond to Webhook' node." });
-        }
-
-        res.json({ reply });
-
-    } catch (error) {
-        console.error('AI Chat Error:', error.message);
-        if (error.response) {
-            // The request was made and the server responded with a status code
-            // that falls out of the range of 2xx
-            console.error('n8n Response Data:', error.response.data);
-            console.error('n8n Response Status:', error.response.status);
-            return res.status(error.response.status).json({
-                reply: `AI Service Error (${error.response.status}): ${JSON.stringify(error.response.data)}`
-            });
-        } else if (error.request) {
-            // The request was made but no response was received
-            console.error('n8n No Response:', error.request);
-            return res.status(503).json({ reply: "AI Service is unreachable. Is n8n running?" });
-        } else {
-            // Something happened in setting up the request that triggered an Error
-            console.error('Error setting up n8n request:', error.message);
-            res.status(500).json({ reply: "Internal Server Error during AI request." });
-        }
+        await log.save();
+        currentThreatLevel = await calculateThreatLevel();
+        const logs = await ThreatLog.find().sort({_id: -1}).limit(20);
+        res.json({ threatLevel: currentThreatLevel, logs });
+    } catch (err) {
+        res.status(500).json({ error: 'Simulation failed' });
     }
+});
+
+// AI EXPLANATION API
+app.post('/api/explain', async (req, res) => {
+    const { log } = req.body;
+    if (!log) return res.status(400).json({ error: 'Log data required' });
+    
+    // Simulate AI Agent reasoning
+    setTimeout(() => {
+        const reasonings = {
+            'Phishing Email': `The Email Analyzer Agent detected spoofed headers and a malicious payload link matching VirusTotal's database. The Decision Agent recommended immediate quarantine.`,
+            'Malware Download': `The URL Scanner Agent identified obfuscated code executing a known trojan signature. Connection was severed by the Auto-Response System.`,
+            'SQL Injection': `The Behavior Analysis Agent detected anomalous syntax in login parameters (' OR 1=1 --). Blocked by WAF automatically.`,
+            'Brute Force SSH': `Behavior Analysis Agent noted >50 failed login attempts from a single suspect IP in 10 seconds. The IP has been blacklisted by Auto-Response System.`,
+            'Anomalous Login': `Behavior Analysis Agent flagged login from unverified geo-location. Multi-factor auth enforcement was triggered resulting in a timeout.`,
+        };
+        const defaultText = `Our distributed AI Agents collaborated to analyze this ${log.severity} threat. The behavior matched suspicious patterns and was neutralized proactively.`;
+        res.json({ explanation: reasonings[log.type] || defaultText });
+    }, 1500); // slight delay to simulate thinking
 });
 
 app.listen(PORT, () => {

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { HashLink } from 'react-router-hash-link';
 import { FaShieldAlt, FaBars, FaTimes } from 'react-icons/fa';
-import { motion } from 'framer-motion';
+
 
 const Navbar = () => {
     const [scrolled, setScrolled] = useState(false);
